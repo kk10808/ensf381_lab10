@@ -35,21 +35,21 @@ export const searchProducts = async (query) => {
 
 // Adds a new product to the database
 export const addProduct = (product) => {
-    return axios.post(`${BASE_URL}/add`,JSON.stringify(product),{
-        headers : {
-        'Content-Type':'application/json',
+    return axios.post(`${BASE_URL}/add`, JSON.stringify(product), {
+        headers: {
+            'Content-Type': 'application/json',
         },
-        });
-    };
+    });
+};
 
 // Edits an existing product by ID
 export const editProduct = (id, product) => {
-    return axios.post(`${BASE_URL}/add`,JSON.stringify(product),{
-        headers : {
-        'Content-Type':'application/json',
+    return axios.put(`${BASE_URL}/${id}`, JSON.stringify(product), {
+        headers: {
+            'Content-Type': 'application/json',
         },
-        });
-    };
+    });
+};
 
 // Deletes a product by its ID
 export const removeProduct = async (id) => {
@@ -57,6 +57,6 @@ export const removeProduct = async (id) => {
         const response = await axios.delete(`${BASE_URL}/${id}`);
         return response.data;
     } catch (error) {
-        throw error; // Rethrow to allow caller to handle
+        throw error; 
     }
 };

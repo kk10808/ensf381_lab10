@@ -23,7 +23,7 @@ def get_products(product_id=None):
         else:
             return ('', 404)
 
-@app.route('/products/add', methods=['POST'])
+@app.route('/products', methods=['POST'])
 def add_product():
     new_product = request.json
     products = load_products()
@@ -33,10 +33,34 @@ def add_product():
         json.dump({"products": products}, f)
     return jsonify(new_product), 201
 
+@app.route('/products/<int:product_id>', methods=['PUT'])
+def update_product(product_id):
+    products = load_products()
+    for product in products:
+        if product['id'] == product_id:
+            updated_product_data = request.json
+            # Update the product attributes
+            for key, value in updated_product_data.items():
+                product[key] = value
+            with open('products.json', 'w') as f:
+                json.dump({"products": products}, f)
+            return jsonify(product)
+    return ('Product not found', 404)
+
+@app.route('/products/<int:product_id>', methods=['DELETE'])
+def remove_product(product_id):
+    products = load_products()
+    for product in products:
+        if product['id'] == product_id:
+            products.remove(product)
+            with open('products.json', 'w') as f:
+                json.dump({"products": products}, f)
+            return jsonify({'message': 'Product removed successfully'})
+    return ('Product not found', 404)
+
 @app.route('/product-images/<path:filename>')
 def get_image(filename):
     return send_from_directory('product-images', filename)
 
 if __name__ == '__main__':
     app.run(debug=True)
-
